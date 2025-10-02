@@ -5,11 +5,24 @@ import MicIcon from "@mui/icons-material/Mic";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SidebarChannel from "./SidebarChannel";
-import { auth } from "../../firebase";
+import db, { auth } from "../../firebase";
 import { useAppSelecter } from "../../app/hocks";
+import useCollection from "../../hocks/useCollection";
+import { addDoc, collection } from "firebase/firestore";
 
 const Sidebar = () => {
   const user = useAppSelecter((state) => state.user);
+  const { documents: channels } = useCollection("channels");
+
+  const addChannel = async () => {
+    const channelName: string | null = prompt("新しいチャンネルを作成します");
+
+    if (channelName) {
+      await addDoc(collection(db, "channels"), {
+        channelName: channelName,
+      });
+    }
+  };
 
   return (
     <div className="sidebar">
@@ -36,15 +49,17 @@ const Sidebar = () => {
               <ExpandMoreIcon />
               <h4>プログラミングチャンネル</h4>
             </div>
-            <AddIcon className="sidebarAddIcon" />
+            <AddIcon className="sidebarAddIcon" onClick={() => addChannel()} />
           </div>
 
           <div className="sidebarChannelList">
-            <SidebarChannel />
-            <SidebarChannel />
-            <SidebarChannel />
-            <SidebarChannel />
-            <SidebarChannel />
+            {channels.map((channel) => (
+              <SidebarChannel
+                channel={channel}
+                id={channel.id}
+                key={channel.id}
+              />
+            ))}
           </div>
 
           <div className="sidebarFooter">
