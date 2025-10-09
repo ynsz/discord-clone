@@ -11,7 +11,7 @@ import useCollection from "../../hocks/useCollection";
 import { addDoc, collection } from "firebase/firestore";
 
 const Sidebar = () => {
-  const user = useAppSelecter((state) => state.user);
+  const user = useAppSelecter((state) => state.user.user);
   const { documents: channels } = useCollection("channels");
 
   const addChannel = async () => {

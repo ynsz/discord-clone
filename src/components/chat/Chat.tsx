@@ -7,12 +7,15 @@ import {
 import "./Chat.scss";
 import { ChatHeader } from "./ChatHeader";
 import ChatMessage from "./ChatMessage";
+import { useAppSelecter } from "../../app/hocks";
 
 function Chat() {
+  const channelName = useAppSelecter((state) => state.channel.channelName);
+
   return (
     <div className="chat">
       {/* chatHeader */}
-      <ChatHeader />
+      <ChatHeader channelName={channelName} />
       {/* chatMessage */}
       <div className="chatMessage">
         <ChatMessage />
